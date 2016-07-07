@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Workout Notes</string>
+    <string name="logo">Workout\nNotes</string>
+    <string name="bt_novo">Novo</string>
+    <string name="bt_anotacoes">Histórico de Anotações</string>
+    <string name="bt_compartilhar">Compartilhar</string>
+    <string name="action_settings">Compartilhar</string>
+    <string name="text_del_item">Deletar</string>
+    <string name="title_activity_new_note">Nova Anotação</string>
+    <string name="label_data">Data</string>
+    <string name="label_tipo_treino">Tipo de treino</string>
+    <string name="label_pse">Percepção Subjetiva de Esforço (PSE)</string>
+    <string name="label_psr">Percepção Subjetiva de Recuperação (PSR)</string>
+    <string name="label_notes">Anotações</string>
+    <string name="label_del">Deletar</string>
+    <string name="label_salvar">Salvar</string>
+    <string name="label_app">© 2016 OrApp</string>
+    <string name="title_activity_lista_notes">Lista de Anotações</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="message_share_file">Arquivo salvo com sucesso</string>
+    <string name="message_share_file_process">Salvando arquivo</string>
+    <string name="titulo_dialog_exportacao_dados">Compartilhamento</string>
+    <string name="text_compartilhar_dados">Compartilhar dados via</string>
+    <string name="menu_share">Compartilhar dados</string>
+    <string name="mensagem_dialog_erro_exportacao_dados">O arquivo correspondente a esta lista de dados já existe</string>
+    <string name="titulo_alertdialog_erro">Erro</string>
+    <string name="mensagem_dialog_exportacao_dados_local">Dados exportados em:</string>
+
+</resources>

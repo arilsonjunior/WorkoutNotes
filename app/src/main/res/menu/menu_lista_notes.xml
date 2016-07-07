@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.arilsonjunior.workoutnotes.ListaNotesActivity">
+
+
+    <item
+        android:id="@+id/del_item"
+        android:orderInCategory="0"
+        android:title="@string/text_del_item"
+        android:onClick="delNote"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/compartilhar_notes"
+        android:orderInCategory="1"
+        android:onClick="compartilharNotes"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+</menu>
