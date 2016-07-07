@@ -1,4 +1,4 @@
-package com.example.arilsonjunior.workoutnotes;
+package com.workoutnote;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -18,8 +18,9 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.arilsonjunior.workoutnotes.R;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.Locale;
 
 public class ListaNotesActivity extends AppCompatActivity {
 
+    private ListView lv1;
     private static ArrayList<String> arrayNotesCode = new ArrayList<>();
     public static String codeItemForEdit = "";
     private AlertDialog.Builder builder;
@@ -36,6 +38,7 @@ public class ListaNotesActivity extends AppCompatActivity {
     private static String directorySFile;
     private boolean fileExported;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.ENGLISH);
+    DataBaseNotes baseNotes = new DataBaseNotes(ListaNotesActivity.this);
 
     public static String getNameFile() {
         return nameFile;
@@ -75,8 +78,9 @@ public class ListaNotesActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", null);
         builder.setCancelable(false);
         fileExported = false;
+        lv1 = (ListView) findViewById(R.id.listaNotes);
         ArrayList image_details = getListData();
-        final ListView lv1 = (ListView) findViewById(R.id.listaNotes);
+        lv1 = (ListView) findViewById(R.id.listaNotes);
         lv1.setAdapter(new CustomListAdapter(this, image_details));
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,7 +99,7 @@ public class ListaNotesActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
                 codeItemForEdit = String.valueOf(ListaNotes.getArrayListNotesCode().get(position));
-                DataBaseNotes baseNotes = new DataBaseNotes(ListaNotesActivity.this);
+                baseNotes = new DataBaseNotes(ListaNotesActivity.this);
                 baseNotes.selectNoteForEdition(codeItemForEdit);
                 NewNoteActivity.noteMode = true;
                 Intent intent = new Intent(ListaNotesActivity.this, NewNoteActivity.class);
@@ -120,70 +124,75 @@ public class ListaNotesActivity extends AppCompatActivity {
     }
 
     public void compartilharNotes(MenuItem menuItem) {
-        try {
-            if (!fileExported) {
-                FileOutputStream fileOutputStream;
-                DataBaseNotes baseNotes = new DataBaseNotes(ListaNotesActivity.this);
-                baseNotes.selectSpecificNotes(getArrayNotesCode());
-                final ProgressDialog dialog = new ProgressDialog(this);
-                dialog.setMessage(getResources().getString(R.string.message_share_file_process));
-                dialog.setCancelable(false);
-                dialog.show();
-                Calendar calendar = Calendar.getInstance();
-                setNameFile(simpleDateFormat.format(calendar.getTime()));
-                final File file = new File(getDirectoryFile(), getNameFile() + ".txt");
-                setDirectorySFile(file.toString());
-                FileWriter fileWriter = new FileWriter(file, true);
-                fileWriter.append(DataBaseNotes.select_result);
-                fileWriter.flush();
-                fileWriter.close();
+        if (getArrayNotesCode().isEmpty()) {
+            builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+            builder.setMessage(getResources().getString(R.string.mensagem_erro_share_notes));
+            builder.show();
+        } else {
+            try {
+                if (!fileExported) {
+                    baseNotes = new DataBaseNotes(ListaNotesActivity.this);
+                    baseNotes.selectSpecificNotes(getArrayNotesCode());
+                    final ProgressDialog dialog = new ProgressDialog(this);
+                    dialog.setMessage(getResources().getString(R.string.message_share_file_process));
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    Calendar calendar = Calendar.getInstance();
+                    setNameFile(simpleDateFormat.format(calendar.getTime()));
+                    final File file = new File(getDirectoryFile(), getNameFile() + ".txt");
+                    setDirectorySFile(file.toString());
+                    FileWriter fileWriter = new FileWriter(file, true);
+                    fileWriter.append(DataBaseNotes.select_result);
+                    fileWriter.flush();
+                    fileWriter.close();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
-                        builder.setTitle(getResources().getString(R.string.titulo_dialog_exportacao_dados));
-                        builder.setMessage(getResources().getString(R.string.message_share_file));
-                        builder.setNeutralButton(getResources().getString(R.string.menu_share), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    shareData();
-                                } catch (Exception e) {
-                                    builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
-                                    builder.setMessage(e.toString());
-                                    builder.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            builder.setTitle(getResources().getString(R.string.titulo_dialog_exportacao_dados));
+                            builder.setMessage(getResources().getString(R.string.message_share_file));
+                            builder.setNeutralButton(getResources().getString(R.string.menu_share), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        shareData();
+                                    } catch (Exception e) {
+                                        builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+                                        builder.setMessage(e.toString());
+                                        builder.show();
+                                    }
+
                                 }
-
-                            }
-                        });
-                        builder.show();
-                        Toast.makeText(ListaNotesActivity.this, getResources().getString(R.string.mensagem_dialog_exportacao_dados_local) + getDirectorySFile(), Toast.LENGTH_SHORT).show();
-                    }
-                }, 1000);
-                fileExported = true;
-            } else {
-                builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
-                builder.setMessage(getResources().getString(R.string.mensagem_dialog_erro_exportacao_dados));
-                builder.setNeutralButton(getResources().getString(R.string.menu_share), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            shareData();
-                        } catch (Exception e) {
-                            builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
-                            builder.setMessage(e.toString());
+                            });
                             builder.show();
+                            Toast.makeText(ListaNotesActivity.this, getResources().getString(R.string.mensagem_dialog_exportacao_dados_local) + getDirectorySFile(), Toast.LENGTH_SHORT).show();
                         }
+                    }, 1000);
+                    fileExported = true;
+                } else {
+                    builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+                    builder.setMessage(getResources().getString(R.string.mensagem_dialog_erro_exportacao_dados));
+                    builder.setNeutralButton(getResources().getString(R.string.menu_share), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                shareData();
+                            } catch (Exception e) {
+                                builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+                                builder.setMessage(e.toString());
+                                builder.show();
+                            }
 
-                    }
-                });
+                        }
+                    });
+                    builder.show();
+                }
+            } catch (Exception e) {
+                builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+                builder.setMessage(e.toString());
                 builder.show();
             }
-        } catch (Exception e) {
-            builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
-            builder.setMessage(e.toString());
-            builder.show();
         }
     }
 
@@ -195,12 +204,40 @@ public class ListaNotesActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.text_compartilhar_dados)));
     }
 
-
     public void delNote(MenuItem menuItem) {
-        builder.setMessage(arrayNotesCode.get(0));
-        builder.show();
+        if (getArrayNotesCode().isEmpty()) {
+            builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+            builder.setMessage(getResources().getString(R.string.mensagem_alertdialog_lista_vazia));
+            builder.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ListaNotesActivity.this);
+            builder.setTitle(getResources().getString(R.string.titulo_alertdialog_erro));
+            builder.setMessage(getResources().getString(R.string.titulo_alertdialog_del_notes));
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    baseNotes = new DataBaseNotes(ListaNotesActivity.this);
+                    baseNotes.deleteNotes(getArrayNotesCode());
+                    getArrayNotesCode().clear();
+                    refreshNotes();
+                }
+            });
+            builder.setNegativeButton("Cancelar", null);
+            builder.show();
+        }
     }
 
+    public void refreshNotes(MenuItem menuItem) {
+        refreshNotes();
+    }
+
+    public void refreshNotes() {
+        ListaNotes.clearList();
+        baseNotes.selectNotes();
+        ArrayList image_details = getListData();
+        lv1.setAdapter(new CustomListAdapter(this, image_details));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

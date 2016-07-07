@@ -1,4 +1,4 @@
-package com.example.arilsonjunior.workoutnotes;
+package com.workoutnote;
 
 import java.util.ArrayList;
 

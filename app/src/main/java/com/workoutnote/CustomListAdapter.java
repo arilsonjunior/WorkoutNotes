@@ -1,4 +1,4 @@
-package com.example.arilsonjunior.workoutnotes;
+package com.workoutnote;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.arilsonjunior.workoutnotes.R;
 
 import java.util.ArrayList;
 

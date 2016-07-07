@@ -1,4 +1,4 @@
-package com.example.arilsonjunior.workoutnotes;
+package com.workoutnote;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -61,7 +61,6 @@ public class DataBaseNotes extends SQLiteOpenHelper {
     }
 
     public void selectNotes() {
-        //String query = "SELECT " + CO2 + ", " + CO3 + ", " + CO4 + " FROM " + TABLE;
         String query = "SELECT * FROM " + TABLE + " ORDER BY COD DESC";
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
@@ -115,6 +114,14 @@ public class DataBaseNotes extends SQLiteOpenHelper {
         newValues.put(CO5, pse);
         newValues.put(CO6, note);
         sqLiteDatabase.update(TABLE, newValues,"COD=" + code, null);
+    }
+
+    public void deleteNotes(ArrayList<String> stringArrayList) {
+        for (int i = 0; i < stringArrayList.size(); i++) {
+            String s = stringArrayList.get(i);
+            SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+            sqLiteDatabase.delete(TABLE, "COD=" + s, null);
+        }
     }
 
 

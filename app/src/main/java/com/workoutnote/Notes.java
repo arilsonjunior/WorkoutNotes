@@ -1,4 +1,4 @@
-package com.example.arilsonjunior.workoutnotes;
+package com.workoutnote;
 
 /**
  * Created by ArilsonJr on 7/2/16.

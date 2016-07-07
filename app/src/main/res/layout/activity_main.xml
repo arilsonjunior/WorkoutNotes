@@ -13,11 +13,9 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200sp"
+            android:layout_height="150sp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/logonovo"/>
-
-
+            android:src="@drawable/logoworkoutnotes" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,8 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
-            android:onClick="verNotes"
             android:background="#388E3C"
+            android:onClick="verNotes"
             android:text="@string/bt_anotacoes"
             android:textColor="#e4e4e4" />
 
