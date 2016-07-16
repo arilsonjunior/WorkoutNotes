@@ -39,6 +39,9 @@ public class ListaNotesActivity extends AppCompatActivity {
     private boolean fileExported;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.ENGLISH);
     DataBaseNotes baseNotes = new DataBaseNotes(ListaNotesActivity.this);
+    public static ArrayList<Items> itemsArrayList;
+    private int contPress = 0;
+    private boolean contPressV;
 
     public static String getNameFile() {
         return nameFile;
@@ -80,18 +83,29 @@ public class ListaNotesActivity extends AppCompatActivity {
         fileExported = false;
         lv1 = (ListView) findViewById(R.id.listaNotes);
         ArrayList image_details = getListData();
+        itemsArrayList = getItemsArrayList();
         lv1 = (ListView) findViewById(R.id.listaNotes);
         lv1.setAdapter(new CustomListAdapter(this, image_details));
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                if (!contPressV) {
+                    if (contPress == 3) {
+                        Toast.makeText(ListaNotesActivity.this, "Para visualizar ou editar, mantenha o item pressionado.", Toast.LENGTH_LONG).show();
+                        contPressV = true;
+                    } else {
+                        contPress++;
+                    }
+                }
                 CheckBox checkBox = (CheckBox) v.findViewById(R.id.checkbox_item);
                 checkBox.setChecked(!checkBox.isChecked());
                 if (checkBox.isChecked()) {
                     String s = String.valueOf(ListaNotes.getArrayListNotesCode().get(position));
                     getArrayNotesCode().add(s);
+                    itemsArrayList.get(position).setCheckStatus(true);
                 } else {
                     getArrayNotesCode().remove(ListaNotes.getArrayListNotesCode().get(position));
+                    itemsArrayList.get(position).setCheckStatus(false);
                 }
             }
         });
@@ -122,6 +136,19 @@ public class ListaNotesActivity extends AppCompatActivity {
         // Add some more dummy data for testing
         return results;
     }
+
+    private ArrayList<Items> getItemsArrayList() {
+        ArrayList<Items> itemsArrayList = new ArrayList<>();
+        for (int i = 0; i < ListaNotes.getArrayListNotesData().size(); i++) {
+            Items items = new Items();
+            items.setPosition(i);
+            items.setCheckStatus(false);
+            itemsArrayList.add(items);
+        }
+        // Add some more dummy data for testing
+        return itemsArrayList;
+    }
+
 
     public void compartilharNotes(MenuItem menuItem) {
         if (getArrayNotesCode().isEmpty()) {

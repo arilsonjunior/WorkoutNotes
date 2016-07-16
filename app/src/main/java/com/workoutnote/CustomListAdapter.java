@@ -19,6 +19,7 @@ public class CustomListAdapter extends BaseAdapter {
 
     private ArrayList<Notes> listData;
     private LayoutInflater layoutInflater;
+    private ViewHolder holder;
 
     public CustomListAdapter(Context aContext, ArrayList<Notes> listData) {
         this.listData = listData;
@@ -41,17 +42,15 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.row_lista_notes, null);
             holder = new ViewHolder();
+            convertView = layoutInflater.inflate(R.layout.row_lista_notes, parent, false);
             holder.checkBoxItems = (CheckBox) convertView.findViewById(R.id.checkbox_item);
             holder.headlineView = (TextView) convertView.findViewById(R.id.title);
             holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
             holder.reportedDateView = (TextView) convertView.findViewById(R.id.date);
             convertView.setTag(holder);
-
-
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -59,6 +58,11 @@ public class CustomListAdapter extends BaseAdapter {
         holder.headlineView.setText(listData.get(position).getTipoTreino());
         holder.reporterNameView.setText("Treino realizado em: " + listData.get(position).getData());
         holder.reportedDateView.setText("PSE: " + listData.get(position).getPse());
+        if (!ListaNotesActivity.itemsArrayList.get(position).isCheckStatus()) {
+            holder.checkBoxItems.setChecked(false);
+        } else {
+            holder.checkBoxItems.setChecked(true);
+        }
         return convertView;
     }
 

@@ -3,7 +3,7 @@
     <string name="app_name">Workout Notes</string>
     <string name="logo">Workout\nNotes</string>
     <string name="bt_novo">Novo</string>
-    <string name="bt_anotacoes">Histórico de Anotações</string>
+    <string name="bt_anotacoes">Histórico de Treinos</string>
     <string name="bt_compartilhar">Compartilhar</string>
     <string name="action_settings">Compartilhar</string>
     <string name="refresh_notes">Atualizar</string>

@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,40 +47,58 @@ public class NewNoteActivity extends AppCompatActivity {
         builder.setTitle("Erro");
 
 
-        ArrayList<String> spinnerValues = new ArrayList<>();
+        ArrayList<String> spinnerValuesPSR = new ArrayList<>();
+        ArrayList<String> spinnerValuesPSE = new ArrayList<>();
         ArrayList<String> spinnerTipoTreino = new ArrayList<>();
 
-        spinnerValues.add("1");
-        spinnerValues.add("2");
-        spinnerValues.add("3");
-        spinnerValues.add("4");
-        spinnerValues.add("5");
-        spinnerValues.add("6");
-        spinnerValues.add("7");
-        spinnerValues.add("8");
-        spinnerValues.add("9");
-        spinnerValues.add("10");
+        spinnerValuesPSR.add("0 - Nenhuma recuperação");
+        spinnerValuesPSR.add("1 - Muito pouca recuperação");
+        spinnerValuesPSR.add("2 - Pouca recuperação");
+        spinnerValuesPSR.add("3 - Recuperação moderada");
+        spinnerValuesPSR.add("4 - Boa recuperação");
+        spinnerValuesPSR.add("5 - Muito boa recuperação");
+        spinnerValuesPSR.add("6 - ");
+        spinnerValuesPSR.add("7 - Muito, muito boa recuperação");
+        spinnerValuesPSR.add("8 - ");
+        spinnerValuesPSR.add("9 - ");
+        spinnerValuesPSR.add("10 - Totalmente recuperado");
+
+        spinnerValuesPSE.add("0 - Nenhum esforço");
+        spinnerValuesPSE.add("1 - Muito fraco");
+        spinnerValuesPSE.add("2 - Fraco");
+        spinnerValuesPSE.add("3 - Moderado");
+        spinnerValuesPSE.add("4 - Um pouco forte");
+        spinnerValuesPSE.add("5 - Forte");
+        spinnerValuesPSE.add("6 - ");
+        spinnerValuesPSE.add("7 - Muito forte");
+        spinnerValuesPSE.add("8 - ");
+        spinnerValuesPSE.add("9 - ");
+        spinnerValuesPSE.add("10 - Esforço máximo");
 
         spinnerTipoTreino.add("Rua");
         spinnerTipoTreino.add("Pista");
         spinnerTipoTreino.add("Rampa");
         spinnerTipoTreino.add("Circuito");
         spinnerTipoTreino.add("Fortalecimento");
+        spinnerTipoTreino.add("Prova");
 
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerValues);
+        ArrayAdapter<String> arrayAdapterPSR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerValuesPSR);
+        ArrayAdapter<String> arrayAdapterPSE = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerValuesPSE);
         ArrayAdapter<String> arrayAdapterTipoTreino = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerTipoTreino);
 
         sp_psr = (Spinner) findViewById(R.id.sp_psr);
         sp_pse = (Spinner) findViewById(R.id.sp_pse);
         sp_tipo_treino = (Spinner) findViewById(R.id.sp_tipo_treino);
-        sp_psr.setAdapter(arrayAdapter);
-        sp_pse.setAdapter(arrayAdapter);
+        sp_psr.setAdapter(arrayAdapterPSR);
+        sp_pse.setAdapter(arrayAdapterPSE);
         sp_tipo_treino.setAdapter(arrayAdapterTipoTreino);
 
         if (!ListaNotesActivity.codeItemForEdit.equals("")) {
             editTextDate.setText(DataBaseNotes.data);
             int tipotreinoposition = 0;
+            int psr = 0;
+            int pse = 0;
             switch (DataBaseNotes.tipotreino) {
                 case "Rua":
                     tipotreinoposition = 0;
@@ -97,9 +116,79 @@ public class NewNoteActivity extends AppCompatActivity {
                     tipotreinoposition = 4;
                     break;
             }
+            switch (DataBaseNotes.psr) {
+                case "0 - Nenhuma recuperação":
+                    psr = 0;
+                    break;
+                case "1 - Muito pouca recuperação":
+                    psr = 1;
+                    break;
+                case "2 - Pouca recuperação":
+                    psr = 2;
+                    break;
+                case "3 - Recuperação moderada":
+                    psr = 3;
+                    break;
+                case "4 - Boa recuperação":
+                    psr = 4;
+                    break;
+                case "5 - Muito boa recuperação":
+                    psr = 5;
+                    break;
+                case "6 - ":
+                    psr = 6;
+                    break;
+                case "7 - Muito, muito boa recuperação":
+                    psr = 7;
+                    break;
+                case "8 - ":
+                    psr = 8;
+                    break;
+                case "9 - ":
+                    psr = 9;
+                    break;
+                case "10 - Totalmente recuperado":
+                    psr = 10;
+                    break;
+            }
+            switch (DataBaseNotes.pse) {
+                case "0 - Nenhum esforço":
+                    pse = 0;
+                    break;
+                case "1 - Muito fraco":
+                    pse = 1;
+                    break;
+                case "2 - Fraco":
+                    pse = 2;
+                    break;
+                case "3 - Moderado":
+                    pse = 3;
+                    break;
+                case "4 - Um pouco forte":
+                    pse = 4;
+                    break;
+                case "5 - Forte":
+                    pse = 5;
+                    break;
+                case "6 - ":
+                    pse = 6;
+                    break;
+                case "7 - Muito forte":
+                    pse = 7;
+                    break;
+                case "8 - ":
+                    pse = 8;
+                    break;
+                case "9 - ":
+                    pse = 9;
+                    break;
+                case "10 - Esforço máximo":
+                    pse = 10;
+                    break;
+            }
             sp_tipo_treino.setSelection(tipotreinoposition);
-            sp_psr.setSelection(Integer.parseInt(DataBaseNotes.psr) - 1);
-            sp_pse.setSelection(Integer.parseInt(DataBaseNotes.pse) - 1);
+            sp_psr.setSelection(psr);
+            sp_pse.setSelection(pse);
             editTextNotes.setText(DataBaseNotes.note);
         }
 
@@ -158,11 +247,18 @@ public class NewNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (NewNoteActivity.noteMode) {
-                    DataBaseNotes baseNotes = new DataBaseNotes(NewNoteActivity.this);
-                    baseNotes.updateData(ListaNotesActivity.codeItemForEdit, editTextDate.getText().toString(), sp_tipo_treino.getSelectedItem().toString(), sp_psr.getSelectedItem().toString(), sp_pse.getSelectedItem().toString(), editTextNotes.getText().toString());
-                    NewNoteActivity.noteMode = false;
-                    Intent intent = new Intent(NewNoteActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    try {
+                        DataBaseNotes baseNotes = new DataBaseNotes(NewNoteActivity.this);
+                        baseNotes.updateData(ListaNotesActivity.codeItemForEdit, editTextDate.getText().toString(), sp_tipo_treino.getSelectedItem().toString(), sp_psr.getSelectedItem().toString(), sp_pse.getSelectedItem().toString(), editTextNotes.getText().toString());
+                        NewNoteActivity.noteMode = false;
+                        ListaNotesActivity.codeItemForEdit = "";
+                        Toast.makeText(NewNoteActivity.this, "Anotação editada com sucesso", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(NewNoteActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        builder.setMessage(e.toString());
+                        builder.show();
+                    }
                 } else {
                     try {
                         Notes notes = new Notes();
@@ -184,5 +280,21 @@ public class NewNoteActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        ListaNotesActivity.codeItemForEdit = "";
+        NewNoteActivity.noteMode = false;
+        if (android.os.Build.VERSION.SDK_INT < 5 /* ECLAIR */
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            // Take care of calling this method on earlier versions of
+            // the platform where it doesn't exist.
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }
