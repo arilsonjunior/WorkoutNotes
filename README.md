@@ -2,7 +2,7 @@
 
 App for notes of running workouts.
 
-Author: Arilson José de Oliveira Júnior
+Author: Arilson Jr
 
 July 6, 2016
 
